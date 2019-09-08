@@ -15,19 +15,20 @@
         <img :src="image" alt="Socks">
       </div>
       <div class="product-info">
-        <h1>{{ product }}</h1>
-        <p v-show="inStock">In stock</p>
+        <h1>{{ title }}</h1>
+        <p v-if="inStock">In stock</p>
+        <p v-else>Out stock</p>
 
         <ul v-for="detail in details">
           <li>{{ detail }}</li>
         </ul>
 
         <div
-          v-for="variant in variants"
+          v-for="(variant, index) in variants"
           :key="variant.id"
           class="color-box"
           :style="{ backgroundColor: variant.color }"
-          @mouseover="updateProduct(variant.image)"
+          @mouseover="updateProduct(index)"
           >
         </div>
 
@@ -45,24 +46,35 @@
     const app = new Vue({
       el: '#app',
       data: {
+        brand: 'Vue Mastery',
         product: 'Socks',
-        image: './assets/images/vmSocks-green-onWhite.jpg',
-        inStock: true,
         details: ['80% cotton', '20% polyester', 'Gender-neutral', ],
         variants: [
-          { id: 2234, color: 'green', image: './assets/images/vmSocks-green-onWhite.jpg' },
-          { id: 2235, color: 'blue', image: './assets/images/vmSocks-blue-onWhite.jpg' },
+          { id: 2234, color: 'green', image: './assets/images/vmSocks-green-onWhite.jpg', inStock: true, },
+          { id: 2235, color: 'blue', image: './assets/images/vmSocks-blue-onWhite.jpg', inStock: false, },
         ],
+        selectedVariant: 0,
         cart: 0,
       },
       methods: {
         addToCart() {
           this.cart += 1;
         },
-        updateProduct(image) {
-          this.image = image;
+        updateProduct(index) {
+          this.selectedVariant = index;
         },
-      }
+      },
+      computed: {
+        title() {
+          return `${this.brand} ${this.product}`;
+        },
+        image() {
+          return this.variants[this.selectedVariant].image;
+        },
+        inStock() {
+          return this.variants[this.selectedVariant].inStock;
+        }
+      },
     });
   </script>
 </body>
