@@ -16,6 +16,7 @@
       </div>
       <div class="product-info">
         <h1>{{ product }}</h1>
+        <p v-show="inStock">In stock</p>
       </div>
     </div>
   </div>
@@ -26,6 +27,7 @@
       data: {
         product: 'Socks',
         image: './assets/images/vmSocks-green-onWhite.jpg',
+        inStock: true,
       },
     });
   </script>
