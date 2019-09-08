@@ -23,9 +23,15 @@
         </ul>
 
         <div v-for="variant in variants" :key="variant.id">
-          <p>{{ variant.color }}</p>
+          <p @mouseover="updateProduct(variant.image)">{{ variant.color }}</p>
         </div>
 
+        <button v-on:click="addToCart">Add to Cart</button>
+
+        <div class="cart">
+          <p>Cart ({{ cart }})</p>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -39,10 +45,19 @@
         inStock: true,
         details: ['80% cotton', '20% polyester', 'Gender-neutral', ],
         variants: [
-          { id: 2234, color: 'green', },
-          { id: 2235, color: 'blue', },
+          { id: 2234, color: 'green', image: './assets/images/vmSocks-green-onWhite.jpg' },
+          { id: 2235, color: 'blue', image: './assets/images/vmSocks-blue-onWhite.jpg' },
         ],
+        cart: 0,
       },
+      methods: {
+        addToCart() {
+          this.cart += 1;
+        },
+        updateProduct(image) {
+          this.image = image;
+        },
+      }
     });
   </script>
 </body>
