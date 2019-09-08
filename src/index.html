@@ -21,6 +21,12 @@
     Vue.component('product-review', {
       template: `
         <form class="review-form" @submit.prevent="onSubmit">
+          <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul>
+              <li v-for="error in errors">{{ error }}</li>
+            </ul>
+          </p>
           <p>
             <label for="name">Name</label>
             <input name="name" id="name" v-model="name">
@@ -30,7 +36,7 @@
             <textarea name="review" id="review" v-model="review"></textarea>
           </p>
           <p>
-            <label for="rating">Review</label>
+            <label for="rating">Rating</label>
             <select name="rating" id="rating" v-model.number="rating">
               <option></option>                
               <option value="1">1</option>
@@ -48,16 +54,30 @@
           name: null,
           review: null,
           rating: null,
+          errors: [],
         };
       },
       methods: {
         onSubmit() {
           let { name, review, rating } = this;
-          let productReview = { name, review, rating };
-          this.$emit('add-to-review', productReview);
-          this.name = null;
-          this.review = null;
-          this.rating = null;
+          if (name !== null && review !== null && rating !== null) {
+            let productReview = { name, review, rating };
+            this.$emit('add-to-review', productReview);
+            this.name = null;
+            this.review = null;
+            this.rating = null;
+          } else {
+            this.errors = [];
+            if (name === null) {
+              this.errors.push("Name is required.");
+            }
+            if (review === null) {
+              this.errors.push("Review is required.");
+            }
+            if (rating === null) {
+              this.errors.push("Rating is required.");
+            }
+          }
         },
       },
     });
