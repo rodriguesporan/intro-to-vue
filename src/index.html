@@ -5,17 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Intro to Vue</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
+  <div class="nav-bar"></div>
   <div id="app">
-    {{ product }}
+    <div class="product">
+      <div class="product-image">
+        <img :src="image" alt="Socks">
+      </div>
+      <div class="product-info">
+        <h1>{{ product }}</h1>
+      </div>
+    </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script>
     const app = new Vue({
       el: '#app',
       data: {
-        product: 'Socks'
+        product: 'Socks',
+        image: './assets/images/vmSocks-green-onWhite.jpg',
       },
     });
   </script>
