@@ -17,6 +17,15 @@
       <div class="product-info">
         <h1>{{ product }}</h1>
         <p v-show="inStock">In stock</p>
+
+        <ul v-for="detail in details">
+          <li>{{ detail }}</li>
+        </ul>
+
+        <div v-for="variant in variants" :key="variant.id">
+          <p>{{ variant.color }}</p>
+        </div>
+
       </div>
     </div>
   </div>
@@ -28,6 +37,11 @@
         product: 'Socks',
         image: './assets/images/vmSocks-green-onWhite.jpg',
         inStock: true,
+        details: ['80% cotton', '20% polyester', 'Gender-neutral', ],
+        variants: [
+          { id: 2234, color: 'green', },
+          { id: 2235, color: 'blue', },
+        ],
       },
     });
   </script>
