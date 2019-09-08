@@ -16,8 +16,52 @@
 
     <product :premium="premium" @add-to-cart="updateCart"></product>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+    Vue.component('product-review', {
+      template: `
+        <form class="review-form" @submit.prevent="onSubmit">
+          <p>
+            <label for="name">Name</label>
+            <input name="name" id="name" v-model="name">
+          </p>
+          <p>
+            <label for="review">Review</label>
+            <textarea name="review" id="review" v-model="review"></textarea>
+          </p>
+          <p>
+            <label for="rating">Review</label>
+            <select name="rating" id="rating" v-model.number="rating">
+              <option></option>                
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </p>
+          <button type="submit">Save</button>
+        </form>
+      `,
+      data() {
+        return {
+          name: null,
+          review: null,
+          rating: null,
+        };
+      },
+      methods: {
+        onSubmit() {
+          let { name, review, rating } = this;
+          let productReview = { name, review, rating };
+          this.$emit('add-to-review', productReview);
+          this.name = null;
+          this.review = null;
+          this.rating = null;
+        },
+      },
+    });
+
     Vue.component('product', {
       props: {
         premium: {
@@ -51,8 +95,9 @@
             </div>
 
             <button v-on:click="addToCart" v-bind:disabled="!inStock" :class="{ disabledButton: !inStock }">Add to Cart</button>
-            
+
           </div>
+          <product-review @add-to-review="updateReviews"></product-review>
         </div>
       `,
       data() {
@@ -66,6 +111,7 @@
           ],
           selectedVariant: 0,
           cart: 0,
+          reviews: [],
         };
       },
       methods: {
@@ -74,6 +120,9 @@
         },
         updateProduct(index) {
           this.selectedVariant = index;
+        },
+        updateReviews(productReview) {
+          this.reviews.push(productReview);
         },
       },
       computed: {
