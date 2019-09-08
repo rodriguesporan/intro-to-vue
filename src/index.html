@@ -10,51 +10,63 @@
 <body>
   <div class="nav-bar"></div>
   <div id="app">
-    <div class="product">
-      <div class="product-image">
-        <img :src="image" alt="Socks">
-      </div>
-      <div class="product-info">
-        <h1>{{ title }}</h1>
-        <p v-if="inStock">In stock</p>
-        <p v-else>Out stock</p>
-
-        <ul v-for="detail in details">
-          <li>{{ detail }}</li>
-        </ul>
-
-        <div
-          v-for="(variant, index) in variants"
-          :key="variant.id"
-          class="color-box"
-          :style="{ backgroundColor: variant.color }"
-          @mouseover="updateProduct(index)"
-          >
-        </div>
-
-        <button v-on:click="addToCart" v-bind:disabled="!inStock" :class="{ disabledButton: !inStock }">Add to Cart</button>
-
-        <div class="cart">
-          <p>Cart ({{ cart }})</p>
-        </div>
-        
-      </div>
-    </div>
+    <product :premium="premium"></product>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script>
-    const app = new Vue({
-      el: '#app',
-      data: {
-        brand: 'Vue Mastery',
-        product: 'Socks',
-        details: ['80% cotton', '20% polyester', 'Gender-neutral', ],
-        variants: [
-          { id: 2234, color: 'green', image: './assets/images/vmSocks-green-onWhite.jpg', inStock: true, },
-          { id: 2235, color: 'blue', image: './assets/images/vmSocks-blue-onWhite.jpg', inStock: false, },
-        ],
-        selectedVariant: 0,
-        cart: 0,
+    Vue.component('product', {
+      props: {
+        premium: {
+          type: Boolean,
+          required: true,
+        },
+      },
+      template: `
+        <div class="product">
+          <div class="product-image">
+            <img :src="image" alt="Socks">
+          </div>
+          <div class="product-info">
+            <h1>{{ title }}</h1>
+            <p>Shipping: {{ shipping }}</p>
+
+            <p v-if="inStock">In stock</p>
+            <p v-else>Out stock</p>
+
+            <ul v-for="detail in details">
+              <li>{{ detail }}</li>
+            </ul>
+
+            <div
+              v-for="(variant, index) in variants"
+              :key="variant.id"
+              class="color-box"
+              :style="{ backgroundColor: variant.color }"
+              @mouseover="updateProduct(index)"
+              >
+            </div>
+
+            <button v-on:click="addToCart" v-bind:disabled="!inStock" :class="{ disabledButton: !inStock }">Add to Cart</button>
+
+            <div class="cart">
+              <p>Cart ({{ cart }})</p>
+            </div>
+            
+          </div>
+        </div>
+      `,
+      data() {
+        return {
+          brand: 'Vue Mastery',
+          product: 'Socks',
+          details: ['80% cotton', '20% polyester', 'Gender-neutral', ],
+          variants: [
+            { id: 2234, color: 'green', image: './assets/images/vmSocks-green-onWhite.jpg', inStock: true, },
+            { id: 2235, color: 'blue', image: './assets/images/vmSocks-blue-onWhite.jpg', inStock: false, },
+          ],
+          selectedVariant: 0,
+          cart: 0,
+        };
       },
       methods: {
         addToCart() {
@@ -73,7 +85,16 @@
         },
         inStock() {
           return this.variants[this.selectedVariant].inStock;
+        },
+        shipping() {
+          return (this.premium) ? 'free': '$ 2.99';
         }
+      },
+    });
+    const app = new Vue({
+      el: '#app',
+      data: {
+        premium: true,
       },
     });
   </script>
